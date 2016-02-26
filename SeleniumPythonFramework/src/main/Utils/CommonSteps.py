@@ -1,11 +1,8 @@
-__author__ = 'ginogalotti'
-
-import sys
-import os
 import ast
+import os
+import sys
 
 from Constants import FrameworkConstants
-
 
 SAUCE_URL = "http://%s:%s@ondemand.saucelabs.com:80/wd/hub"
 
@@ -28,8 +25,8 @@ def get_environment_variables():
 
     # Params defined on ENV variables
     env_variables_dict = dict()
-    env_variables_dict['sauce_user'] = os.getenv('SAUCE_USER_NAME', "qaimport")
-    env_variables_dict['sauce_pass'] = os.getenv('SAUCE_API_KEY', "5e913b11-3c04-4c65-916d-1d8cac30caa4")
+    env_variables_dict['sauce_user'] = os.getenv('SAUCE_USER_NAME', "SAUCE_NAME")
+    env_variables_dict['sauce_pass'] = os.getenv('SAUCE_API_KEY', "SAUCE_API")
     env_variables_dict['tool'] = os.getenv('TESTING_TOOL', None)
     env_variables_dict['chromedriver_local'] = FrameworkConstants.MAC_CHROMEDRIVER_PATH
     if env_variables_dict['tool'] and env_variables_dict['tool'].lower() == "docker":
@@ -38,13 +35,13 @@ def get_environment_variables():
                                                  env_variables_dict['tool'])
     env_variables_dict['mobile'] = get_bool(os.getenv('TESTING_MOBILE', 'False'))
     env_variables_dict['build'] = os.getenv('BUILD_ID', None)
-    env_variables_dict['project'] = os.getenv('TESTING_PROJECT_NAME', 'import.io')
-    env_variables_dict['env'] = os.getenv('TESTING_ENV', 'staging')
+    env_variables_dict['project'] = os.getenv('TESTING_PROJECT_NAME', 'PROJECT_NAME')
+    env_variables_dict['env'] = os.getenv('TESTING_ENV', 'ENV')
     env_variables_dict['default_resolution'] = os.getenv('SELENIUM_SCREEN_RESOLUTION', "1600x1200")
     env_variables_dict['video_upload_on_pass'] = get_bool(os.getenv('SELENIUM_VIDEO_UPLOAD_PASS', 'False'))
     env_variables_dict['command_timeout'] = os.getenv('SAUCE_COMMAND_TIMEOUT', 120)
-    env_variables_dict['testingbot_user'] = os.getenv('TESTINGBOT_NAME', "2676672c2da58b2119c44405507723d2")
-    env_variables_dict['testingbot_pass'] = os.getenv('TESTINGBOT_API', "b0d46c605cd4ae4a9be3f9de3ac1074d")
+    env_variables_dict['testingbot_user'] = os.getenv('TESTINGBOT_NAME', "TESTINGBOT_NAME")
+    env_variables_dict['testingbot_pass'] = os.getenv('TESTINGBOT_API', "TESTINGBOT_API")
 
     return env_variables_dict
 

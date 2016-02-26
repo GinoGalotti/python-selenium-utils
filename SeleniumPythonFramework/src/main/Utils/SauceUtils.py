@@ -15,7 +15,6 @@ class SauceUtils(object):
             self.password = password
             self.sauce_client = SauceClient(user, password)
 
-
     def get_command_url(self):
         url = self.SAUCE_URL % (self.user, self.password)
         return url
