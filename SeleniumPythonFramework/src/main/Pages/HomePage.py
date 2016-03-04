@@ -1,7 +1,7 @@
+from SeleniumPythonFramework.src.main.Utils.DriverUtils import wait_element_to_be_present
 from selenium.webdriver.common.by import By
 
 from SeleniumPythonFramework.src.main.Pages.CommonPage import CommonPage
-from SeleniumPythonFramework.src.main.Utils.DriverUtils import wait_element_to_be_present
 
 # Production locations
 TRY_TEXT = {"by": By.ID, "locator": "url-input"}

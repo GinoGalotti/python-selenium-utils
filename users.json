@@ -1,0 +1,21 @@
+{
+  "production": {
+    "users": {
+      "functional": {
+        "username": "user_example",
+        "email": "email_example",
+        "password": "im_not_going_to_write_it_here"
+      },
+      "admin": {
+        "roles": [
+          "ADMIN"
+        ],
+        "username": "i-dont-have-an-admin-user",
+        "email": "super-admin@atlassian.com",
+        "password": "probably-something-really-complex"
+      }
+    }
+  },
+  "default": {
+  }
+}

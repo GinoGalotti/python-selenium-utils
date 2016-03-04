@@ -5,28 +5,28 @@ import unittest
 from selenium import webdriver
 
 from SeleniumPythonFramework.src.main.Actions.PageActionExample import HomePageActions
-from SeleniumPythonFramework.src.main.utils.Utils.CommonSteps import on_platforms, get_environment_variables
-from SeleniumPythonFramework.src.main.utils.Utils.Constants import TestingConstants
-from SeleniumPythonFramework.src.main.utils.Utils.DriverUtils import set_mobile_view
-from SeleniumPythonFramework.src.main.utils.Utils.SauceUtils import SauceUtils
-from SeleniumPythonFramework.src.main.utils.Utils.TestContext import TestContext
-from SeleniumPythonFramework.src.main.utils.Utils.TestingbotUtils import TestingbotUtils
+from SeleniumPythonFramework.src.main.Utils.common import environment_variables
+from SeleniumPythonFramework.src.main.Utils.common_steps import on_platforms
+from SeleniumPythonFramework.src.main.Utils.constants import TestingConstants
+from SeleniumPythonFramework.src.main.Utils.driver_utils import set_mobile_view
+from SeleniumPythonFramework.src.main.Utils.sauce_utils import SauceUtils
+from SeleniumPythonFramework.src.main.Utils.testingbot_utils import TestingbotUtils
+from SeleniumPythonFramework.src.main.Utils.world_context import WorldContext
 
-env_variables = get_environment_variables()
+sauce_utils = SauceUtils(environment_variables['sauce_user'], environment_variables['sauce_pass'],
+                         environment_variables['tool'])
+testingbot_utils = TestingbotUtils(environment_variables['testingbot_user'], environment_variables['testingbot_pass'],
+                                   environment_variables['tool'])
 
-sauce_utils = SauceUtils(env_variables['sauce_user'], env_variables['sauce_pass'], env_variables['tool'])
-testingbot_utils = TestingbotUtils(env_variables['testingbot_user'], env_variables['testingbot_pass'],
-                                   env_variables['tool'])
 
-
-@on_platforms(env_variables['browser'])
+@on_platforms(environment_variables['browser'])
 class TestSmoke(unittest.TestCase):
     def setUp(self):
 
         if testingbot_utils.check_using_tool():
             self.tools_utils = testingbot_utils
             self.desired_capabilities = TestingbotUtils.add_extra_desired_capabilities(self.desired_capabilities,
-                                                                                       env_variables)
+                                                                                       environment_variables)
             driver = webdriver.Remote(
                 command_executor=testingbot_utils.get_command_url(),
                 desired_capabilities=self.desired_capabilities)
@@ -35,15 +35,15 @@ class TestSmoke(unittest.TestCase):
             # This values can't not be defined with Saucelab plugin
             self.tools_utils = sauce_utils
             self.desired_capabilities = SauceUtils.add_extra_desired_capabilities(self.desired_capabilities,
-                                                                                  env_variables)
+                                                                                  environment_variables)
             driver = webdriver.Remote(
                 command_executor=sauce_utils.get_command_url(),
                 desired_capabilities=self.desired_capabilities)
-            if env_variables['build']:
-                self.tools_utils.update_build_name(self.test_context.driver.session_id, env_variables['build'])
+            if environment_variables['build']:
+                self.tools_utils.update_build_name(self.test_context.driver.session_id, environment_variables['build'])
 
         else:
-            driver = webdriver.Chrome(executable_path=os.path.realpath(env_variables['chromedriver_local']))
+            driver = webdriver.Chrome(executable_path=os.path.realpath(environment_variables['chromedriver_local']))
             self.tools_utils = sauce_utils
             # driver = webdriver.PhantomJS()
 
@@ -51,7 +51,7 @@ class TestSmoke(unittest.TestCase):
 
         # Needing for some concurrent testing?
         self.test_context = threading.local()
-        self.test_context = TestContext(driver, env_variables['env'], env_variables['mobile'])
+        self.test_context = WorldContext(driver, environment_variables['env'], environment_variables['mobile'])
         set_mobile_view(self.test_context.mobile, self.test_context.driver)
 
     # MAGIC TESTING

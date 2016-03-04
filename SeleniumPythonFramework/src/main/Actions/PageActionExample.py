@@ -1,7 +1,8 @@
-from CommonActions import CommonActions
-from SeleniumPythonFramework.src.main.Pages.HomePage import HomePage
 from SeleniumPythonFramework.src.main.Utils.DriverUtils import Wait_for_page_load, sleep_small, sleep_medium, \
     sleep_long
+
+from CommonActions import CommonActions
+from SeleniumPythonFramework.src.main.Pages.HomePage import HomePage
 
 __author__ = 'Gino'
 
@@ -13,22 +14,18 @@ class HomePageActions(CommonActions):
         super(HomePageActions, self).__init__(**kwargs)
         self.home_page = self.init_page_object(HomePage)
 
-    def load_home(self):
-        with Wait_for_page_load(self.test_context.driver):
-            self.go_to_url(self.home_page.page_url)
-
     def click_log_in(self):
-        with Wait_for_page_load(self.test_context.driver):
+        with self.wait_for_page_load:
             self.home_page.log_in_button().click()
             self.change_to_new_window()
 
     def click_sign_up(self):
-        with Wait_for_page_load(self.test_context.driver):
+        with self.wait_for_page_load:
             self.home_page.sign_up_button().click()
             self.change_to_new_window()
 
     def click_pricing(self):
-        with Wait_for_page_load(self.test_context.driver):
+        with self.wait_for_page_load:
             self.home_page.pricing_button().click()
 
     def click_show_examples(self):
@@ -60,6 +57,6 @@ class HomePageActions(CommonActions):
 
     def log_out(self):
         self.home_page.my_account_button().click()
-        with Wait_for_page_load(self.test_context.driver):
+        with self.wait_for_page_load:
             self.home_page.log_out_button().click()
         self.test_context.logged_account = None
