@@ -4,7 +4,7 @@ import unittest
 
 from selenium import webdriver
 
-from SeleniumPythonFramework.src.main.Actions.PageActionExample import HomePageActions
+from SeleniumPythonFramework.src.main.Pages.HomePage import HomePage
 from SeleniumPythonFramework.src.main.Utils.common import environment_variables
 from SeleniumPythonFramework.src.main.Utils.common_steps import on_platforms
 from SeleniumPythonFramework.src.main.Utils.constants import TestingConstants
@@ -60,11 +60,11 @@ class TestSmoke(unittest.TestCase):
         self.tools_utils.update_job_name(self.test_context.driver.session_id, self._testMethodName, ["magic"])
 
         # And we are in HOME
-        home_page_actions = HomePageActions(test_context=self.test_context)
-        home_page_actions.load_home()
+        home_page = self.test_context.create_page_object(HomePage)
+        home_page.load_page()
 
         # When we write an url and click try it out
-        home_page_actions.try_url(TestingConstants.MAGIC_TRY_OUT_URL_EXAMPLE["url"])
+        home_page.try_url(TestingConstants.MAGIC_TRY_OUT_URL_EXAMPLE["url"])
 
         # Then magic page is shown
         self.assertIn(TestingConstants.EXPECTED_URL_MAGIC, self.test_context.driver.current_url,
