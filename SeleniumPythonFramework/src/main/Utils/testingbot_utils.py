@@ -1,5 +1,3 @@
-__author__ = 'Gino'
-
 import sys
 
 from testingbotclient import TestingBotClient
@@ -8,7 +6,7 @@ from testingbotclient import TestingBotClient
 class TestingbotUtils(object):
     TESTINGBOT_URL = "http://%s:%s@hub.testingbot.com:4444/wd/hub"
 
-    def __init__(self, user, password, tool):
+    def __init__(self, user, password, tool, desired_capabilities):
         self.is_testingbot = (tool and tool.lower() == 'testingbot')
         if self.is_testingbot:
             self.user = user

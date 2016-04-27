@@ -1,5 +1,5 @@
-virtualenv testing_env
-pip install --no-cache-dir pytest pytest-xdist selenium testingbot sauceclient
+virtualenv lgalotti_virtualenv
+pip install --no-cache-dir behave selenium
 
 ./run_tests.sh
 

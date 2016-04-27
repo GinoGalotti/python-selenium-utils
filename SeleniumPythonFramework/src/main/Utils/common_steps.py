@@ -3,7 +3,7 @@ import string
 import sys
 from random import randint
 
-from common import user_map
+from constants import FrameworkConstants
 
 
 def on_platforms(platforms):
@@ -18,17 +18,6 @@ def on_platforms(platforms):
     return decorator
 
 
-def get_user_or_create_one(key, roles=None):
-    user = dict()
-    if user_map and key in user_map['users']:
-        user = user_map['users'][key]
-    else:
-        # TODO Create the user in the system with the given roles, OUT OF SCOPE!
-        print "Can't create an user in your system!"
-
-    return user
-
-
 def is_sauce(tool):
     return (tool and tool.lower() == 'sauce')
 
@@ -38,9 +27,9 @@ def is_testingbot(tool):
 
 
 def random_string_with_prefix(prefix="rand"):
-    return prefix + str(randint(0, 1000))
+    return prefix + str(randint(0, 10000000))
 
 
-def generate_random_email(prefix="mailrand", length=6, domain="4null.com"):
+def generate_random_email(prefix="mailrand", length=6, domain="4test.test"):
     random_name = ''.join(random.choice(string.ascii_letters) for i in range(length))
     return prefix + random_name + "@" + domain

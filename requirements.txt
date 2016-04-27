@@ -1,5 +1,2 @@
-pytest
-pytest-xdist
 selenium
-testingbot
-sauceclient
+behave

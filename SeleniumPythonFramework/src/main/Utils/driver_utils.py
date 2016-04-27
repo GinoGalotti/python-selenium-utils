@@ -30,10 +30,44 @@ class Wait_for_page_load(object):
     def __exit__(self, *_):
         wait_for(self.page_has_loaded)
 
+class PageBuilder(object):
+    def __init__(self, context):
+        self.driver = context.driver
+        self.env = context.env
+        self.mobile = context.is_mobile
+
+    def get_page(self, page_object):
+        return page_object(driver=self.driver, env=self.env, mobile=self.mobile)
+
+def wait_for(condition_function):
+    start_time = time.time()
+    while time.time() < start_time + 14:
+        if condition_function():
+            return True
+        else:
+            time.sleep(0.1)
+    raise Exception('Timeout waiting for {}'.format(condition_function.__name__))
+
+
+def wait_for_condition_to_be_bigger(condition_function, number):
+    start_time = time.time()
+    while time.time() < start_time + 14:
+        if condition_function() > number:
+            return True
+        else:
+            time.sleep(0.1)
+    raise Exception('Timeout waiting for {}'.format(condition_function.__name__))
+
+
+def wait_for_element_to_be_present(driver, element, timeout=20):
+    WebDriverWait(driver, timeout).until(
+        EC.presence_of_element_located((element['by'], element['locator']))
+    )
+
 
 # WORK IN PROGRESS
 
-def wait_element_to_be_present(driver, by, locator, timeout=5, multiple_elements=False, retry=True):
+def get_element_when_ready(driver, by, locator, timeout=5, multiple_elements=False, retry=True):
     if element_is_visible(driver, by, locator, timeout):
         if multiple_elements:
             return driver.find_elements(by, locator)
@@ -41,7 +75,7 @@ def wait_element_to_be_present(driver, by, locator, timeout=5, multiple_elements
             return driver.find_element(by, locator)
     else:
         if retry:
-            return wait_element_to_be_present(driver, by, locator, timeout, multiple_elements, retry=False)
+            return get_element_when_ready(driver, by, locator, timeout, multiple_elements, retry=False)
         else:
             return False
 
@@ -72,43 +106,40 @@ def set_window_size_small(driver):
     driver.set_window_size(SIZE_SMALL[0], SIZE_SMALL[1])
 
 
-def set_mobile_view(mobile, driver):
+def pick_window_size(mobile, driver):
     if mobile:
         set_window_size_small(driver)
     else:
         set_window_size_big(driver)
 
 
-def wait_for(condition_function):
-    start_time = time.time()
-    while time.time() < start_time + 14:
-        if condition_function():
-            return True
-        else:
-            time.sleep(0.1)
-    raise Exception('Timeout waiting for {}'.format(condition_function.__name__)
-                    )
-
-
-def get_url(stage, url):
-    stage_url = (get_domain(stage) + url)
-    print("getting url ", stage_url)
+def get_url(url):
+    stage_url = (get_domain() + url)
     return stage_url
 
 
-def get_feeds_url(stage, url):
-    stage_url = (get_domain(stage, prefix="feeds.") + url)
-    print("getting url ", stage_url)
+def get_feeds_url(url):
+    stage_url = (get_domain(prefix="feeds.") + url)
     return stage_url
 
 
-def get_magic_url(stage, url):
-    stage_url = (get_domain(stage, prefix="magic.") + url)
-    print("getting url ", stage_url)
+def get_lightning_url(url):
+    stage_url = (get_domain(prefix="lightning.") + url)
+    stage_url = stage_url.replace("https", "http")  # Otherwise it gets redirected
     return stage_url
 
 
-def get_domain(stage, prefix=""):
+def get_dashboard_url(url):
+    stage_url = (get_domain(prefix="dash.") + url)
+    return stage_url
+
+
+def get_api_url(url):
+    stage_url = (get_domain(prefix="api.") + url)
+    return stage_url
+
+
+def get_domain(prefix=""):
     return "https://{0}{1}".format(prefix, domain)
 
 

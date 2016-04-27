@@ -14,7 +14,7 @@ WINDOWS_CHROMEDRIVER_PATH = "chromedriver/chromedriver.exe"
 # This should be an enum in Python 3.4
 def get_environment_variables():
     # This allow us to specify multiple browsers when using a Selenium grid
-    desired_cap_default = "[ {'platform': 'WIN7', 'browserName': 'firefox', 'version': '24' }, {'platform': 'MAVERICKS', 'browserName': 'chrome', 'version': '46' }]"
+    desired_cap_default = "[ {'platform': 'WIN7', 'browserName': 'firefox', 'version': '45' }, {'platform': 'MAVERICKS', 'browserName': 'chrome', 'version': '46' }]"
 
     # Params defined on ENV variables
     env_variables_dict = dict()
@@ -27,8 +27,8 @@ def get_environment_variables():
                                                  env_variables_dict['tool'])
     env_variables_dict['mobile'] = get_bool(os.getenv('TESTING_MOBILE', 'False'))
     env_variables_dict['build'] = os.getenv('BUILD_ID', None)
-    env_variables_dict['project'] = os.getenv('TESTING_PROJECT_NAME', 'PROJECT_NAME')
-    env_variables_dict['env'] = os.getenv('TESTING_ENV', 'production')
+    env_variables_dict['project'] = os.getenv('TESTING_PROJECT_NAME', 'project name')
+    env_variables_dict['env'] = os.getenv('ENV', 'you-know-the-URL')
 
     # Not needed if we're not using tools
     # env_variables_dict['default_resolution'] = os.getenv('SELENIUM_SCREEN_RESOLUTION', "1600x1200")
@@ -64,23 +64,7 @@ def get_browsers(browser, tool):
         return ast.literal_eval(browser)
 
 
-def load_users(env):
-    filename = "users.json"
-    return load_json_key(filename, env)
-
-
-def load_json_key(file, key):
-    with open(file) as f:
-        config = json.load(f)
-    if key in config:
-        return config[key]
-    # log.warn('Using default configuration from {0} because key [{1}] is undefined.'.format(filename, env))
-    return config['default']
-
 
 environment_variables = get_environment_variables()
-user_map = load_users(environment_variables['env'])
-is_production = environment_variables['env'] == 'production'
+domain = environment_variables['env']
 
-if environment_variables['env'] == 'production':
-    domain = "luisgalottiqa.atlassian.net"

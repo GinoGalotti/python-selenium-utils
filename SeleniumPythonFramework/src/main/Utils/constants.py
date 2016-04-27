@@ -3,7 +3,8 @@ __author__ = 'Gino'
 
 class TestingConstants():
     # Test_Data
-    TESTING_CONSTANT_EXAMPLE = "example"
+    DEFAULT_PASSWORD = "testing"
+    PATH_AFTER_LOGIN = "dash."
 
 
 class FrameworkConstants():
