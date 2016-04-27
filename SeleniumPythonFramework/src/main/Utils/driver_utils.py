@@ -30,10 +30,29 @@ class Wait_for_page_load(object):
     def __exit__(self, *_):
         wait_for(self.page_has_loaded)
 
+def wait_for_condition_to_be_bigger(condition_function, number):
+    start_time = time.time()
+    while time.time() < start_time + 14:
+        if condition_function() > number:
+            return True
+        else:
+            time.sleep(0.1)
+    raise Exception('Timeout waiting for {}'.format(condition_function.__name__))
+
+
+def wait_for_element_to_be_present(driver, element, timeout=20):
+    WebDriverWait(driver, timeout).until(
+        EC.presence_of_element_located((element['by'], element['locator']))
+    )
+
+
+def is_element_present(driver, element, timeout=3):
+    return element_is_visible(driver, element['by'], element['locator'], time)
+
 
 # WORK IN PROGRESS
 
-def wait_element_to_be_present(driver, by, locator, timeout=5, multiple_elements=False, retry=True):
+def get_element_when_ready(driver, by, locator, timeout=5, multiple_elements=False, retry=True):
     if element_is_visible(driver, by, locator, timeout):
         if multiple_elements:
             return driver.find_elements(by, locator)
@@ -41,7 +60,7 @@ def wait_element_to_be_present(driver, by, locator, timeout=5, multiple_elements
             return driver.find_element(by, locator)
     else:
         if retry:
-            return wait_element_to_be_present(driver, by, locator, timeout, multiple_elements, retry=False)
+            return get_element_when_ready(driver, by, locator, timeout, multiple_elements, retry=False)
         else:
             return False
 
