@@ -33,3 +33,7 @@ def random_string_with_prefix(prefix="rand"):
 def generate_random_email(prefix="mailrand", length=6, domain="4test.test"):
     random_name = ''.join(random.choice(string.ascii_letters) for i in range(length))
     return prefix + random_name + "@" + domain
+
+
+def is_production_test(env):
+    return env == FrameworkConstants.PRODUCTION_ENV

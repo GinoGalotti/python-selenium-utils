@@ -30,6 +30,7 @@ class Wait_for_page_load(object):
     def __exit__(self, *_):
         wait_for(self.page_has_loaded)
 
+
 class PageBuilder(object):
     def __init__(self, context):
         self.driver = context.driver
@@ -38,6 +39,7 @@ class PageBuilder(object):
 
     def get_page(self, page_object):
         return page_object(driver=self.driver, env=self.env, mobile=self.mobile)
+
 
 def wait_for(condition_function):
     start_time = time.time()
@@ -63,6 +65,10 @@ def wait_for_element_to_be_present(driver, element, timeout=20):
     WebDriverWait(driver, timeout).until(
         EC.presence_of_element_located((element['by'], element['locator']))
     )
+
+
+def is_element_present(driver, element, timeout=3):
+    return element_is_visible(driver, element['by'], element['locator'], time)
 
 
 # WORK IN PROGRESS
