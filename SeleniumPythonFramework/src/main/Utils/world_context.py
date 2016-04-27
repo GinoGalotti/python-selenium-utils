@@ -13,3 +13,6 @@ class WorldContext(object):
         self.userEmail = None
         self.driver = driver
         self.logged_account = None
+
+    def create_page_object(self, page_object):
+        return page_object(driver=self.driver, env=self.env, mobile=self.mobile)
